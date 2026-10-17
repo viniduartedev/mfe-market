@@ -7,10 +7,11 @@ export interface Order { id: string; items: CartItem[]; total: number; address: 
 export const MARKET_EVENTS = { cartChanged: 'market:cart:changed', orderConfirmed: 'market:order:confirmed' } as const;
 const CART_KEY = 'mercado-mfe:cart';
 const emptyCart = (): CartState => ({ items: [], updatedAt: new Date().toISOString() });
+let ephemeralCart: CartState = emptyCart();
 const hasStorage = () => typeof window !== 'undefined' && !!window.localStorage;
-export function getCart(): CartState { try { const value = hasStorage() ? localStorage.getItem(CART_KEY) : null; return value ? JSON.parse(value) : emptyCart(); } catch { return emptyCart(); } }
-function emitCart(cart: CartState) { if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent<CartState>(MARKET_EVENTS.cartChanged, { detail: cart })); }
-function save(cart: CartState) { if (hasStorage()) localStorage.setItem(CART_KEY, JSON.stringify(cart)); emitCart(cart); return cart; }
+export function getCart(): CartState { try { if (!hasStorage()) return ephemeralCart; const value = localStorage.getItem(CART_KEY); return value ? JSON.parse(value) : emptyCart(); } catch { return emptyCart(); } }
+function emitCart(cart: CartState) { if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') window.dispatchEvent(new CustomEvent<CartState>(MARKET_EVENTS.cartChanged, { detail: cart })); }
+function save(cart: CartState) { ephemeralCart = cart; if (hasStorage()) localStorage.setItem(CART_KEY, JSON.stringify(cart)); emitCart(cart); return cart; }
 export function addToCart(product: Product, quantity = 1) { const cart = getCart(); const found = cart.items.find((item) => item.product.id === product.id); if (found) found.quantity += quantity; else cart.items.push({ product, quantity }); return save({ ...cart, updatedAt: new Date().toISOString() }); }
 export function updateQuantity(productId: string, quantity: number) { const cart = getCart(); cart.items = quantity > 0 ? cart.items.map((item) => item.product.id === productId ? { ...item, quantity } : item) : cart.items.filter((item) => item.product.id !== productId); return save({ ...cart, updatedAt: new Date().toISOString() }); }
 export function removeFromCart(productId: string) { return updateQuantity(productId, 0); }
