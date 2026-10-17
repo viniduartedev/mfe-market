@@ -1,4 +1,25 @@
+# Dependências e artefatos de build
 node_modules/
 dist/
-.env
+coverage/
 *.tsbuildinfo
+
+# Configurações locais e segredos (mantenha os exemplos no repositório)
+.env
+.env.*
+!.env.example
+
+# Logs e caches de ferramentas
+*.log
+pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+.vite/
+.turbo/
+
+# Arquivos locais de plataformas e editores
+.vercel/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
