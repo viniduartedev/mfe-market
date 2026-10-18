@@ -1,1 +1,7 @@
-{ "headers": [{ "source": "/assets/(.*)", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }, { "key": "Access-Control-Allow-Methods", "value": "GET, OPTIONS" }] }] }
+{
+  "rewrites": [
+    { "source": "/checkout", "destination": "/index.html" },
+    { "source": "/cart", "destination": "/index.html" }
+  ],
+  "headers": [{ "source": "/assets/(.*)", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }, { "key": "Access-Control-Allow-Methods", "value": "GET, OPTIONS" }] }]
+}
