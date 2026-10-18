@@ -8,6 +8,7 @@ export default defineConfig({
     federation({
       name: 'catalog',
       filename: 'remoteEntry.js',
+      dts: false,
       exposes: {
         './CatalogApp': './src/CatalogApp.tsx',
       },

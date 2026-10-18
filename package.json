@@ -3,11 +3,14 @@
   "private": true,
   "version": "1.0.0",
   "packageManager": "pnpm@9.15.4",
+  "engines": { "node": ">=20.19.0", "pnpm": ">=9.15.4" },
   "scripts": {
     "dev": "pnpm --parallel --filter './apps/*' dev",
     "build": "pnpm -r build",
     "test": "pnpm -r test",
-    "lint": "pnpm -r lint"
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "validate:vercel": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && node scripts/validate-vercel.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

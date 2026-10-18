@@ -14,8 +14,14 @@ Abra `http://localhost:3000`. As portas são shell 3000, catálogo 3001, carrinh
 
 ```bash
 pnpm lint
+pnpm typecheck
 pnpm test
 pnpm build
+pnpm validate:vercel
 ```
 
-Consulte [ARCHITECTURE.md](ARCHITECTURE.md), [CONTRACTS.md](CONTRACTS.md) e [DEPLOYMENT.md](DEPLOYMENT.md) para detalhes da integração, compatibilidade e publicação.
+`pnpm validate:vercel` é a verificação local completa para publicação: executa qualidade, testes e build, confirma os três `remoteEntry.js` e valida os quatro `vercel.json`. Não chama a CLI da Vercel e não faz deploy.
+
+Não há `.env.example` na raiz: o Vite do shell lê variáveis a partir de `apps/shell`, portanto o único exemplo canônico é [apps/shell/.env.example](apps/shell/.env.example).
+
+Consulte [ARCHITECTURE.md](ARCHITECTURE.md), [CONTRACTS.md](CONTRACTS.md) e [DEPLOYMENT.md](DEPLOYMENT.md) para detalhes da integração, compatibilidade e futura publicação.

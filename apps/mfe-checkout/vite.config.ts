@@ -8,6 +8,7 @@ export default defineConfig({
     federation({
       name: 'checkout',
       filename: 'remoteEntry.js',
+      dts: false,
       exposes: { './CheckoutApp': './src/CheckoutApp.tsx' },
       shared: ['react', 'react-dom'],
     }),
