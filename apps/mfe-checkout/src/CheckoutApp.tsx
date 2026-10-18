@@ -2,6 +2,7 @@ import { clearCart, confirmOrder, getCart, subscribeToCart, type CartState } fro
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { cartQuantity, cartTotal, formatBRL } from './checkout';
 import './checkout.css';
+import AddressFields, { emptyAddress, formatAddress } from './AddressFields';
 
 type PaymentMethod = 'Pix' | 'Cartão de crédito' | 'Cartão na entrega';
 
@@ -9,7 +10,8 @@ const initialCart = (): CartState => getCart();
 
 export default function CheckoutApp() {
   const [cart, setCart] = useState<CartState>(initialCart);
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState(emptyAddress);
+  const [confirmedTotal, setConfirmedTotal] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Pix');
   const [orderId, setOrderId] = useState<string | null>(null);
   const total = useMemo(() => cartTotal(cart.items), [cart.items]);
@@ -19,17 +21,18 @@ export default function CheckoutApp() {
 
   function placeOrder(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!address.trim() || !cart.items.length) return;
+    if (!address.street.trim() || !address.number.trim() || !address.city.trim() || !address.district.trim() || !address.state || address.cep.replace(/\D/g, '').length !== 8 || !cart.items.length) return;
 
     const id = `PED-${Date.now().toString(36).toUpperCase()}`;
     confirmOrder({
       id,
       items: cart.items,
       total,
-      address: address.trim(),
+      address: formatAddress(address),
       paymentMethod,
       createdAt: new Date().toISOString(),
     });
+    setConfirmedTotal(total);
     clearCart();
     setOrderId(id);
   }
@@ -41,7 +44,7 @@ export default function CheckoutApp() {
         <p className="checkout-eyebrow">Pedido confirmado</p>
         <h1>Compra realizada!</h1>
         <p>Seu pedido <strong>{orderId}</strong> foi enviado para separação.</p>
-        <p className="checkout-success__total">Total: {formatBRL(total)}</p>
+        <p className="checkout-success__total">Total: {formatBRL(confirmedTotal)}</p>
         <button type="button" onClick={() => setOrderId(null)}>Fazer novo pedido</button>
       </section>
     );
@@ -57,19 +60,7 @@ export default function CheckoutApp() {
 
       <form className="checkout-layout" onSubmit={placeOrder}>
         <div className="checkout-steps">
-          <fieldset className="checkout-card">
-            <legend>1. Endereço de entrega</legend>
-            <label htmlFor="checkout-address">Onde devemos entregar?</label>
-            <textarea
-              id="checkout-address"
-              name="address"
-              value={address}
-              onChange={(event) => setAddress(event.target.value)}
-              placeholder="Rua, número, complemento e bairro"
-              required
-              rows={3}
-            />
-          </fieldset>
+          <AddressFields value={address} onChange={setAddress} />
 
           <fieldset className="checkout-card">
             <legend>2. Forma de pagamento</legend>

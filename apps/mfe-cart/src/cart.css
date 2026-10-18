@@ -15,9 +15,9 @@
 .market-cart__remove:hover { text-decoration: underline; }
 .market-cart__controls { display: grid; justify-items: end; gap: .55rem; min-width: 144px; }
 .market-cart__quantity { display: flex; align-items: center; overflow: hidden; border: 1px solid #bfd2c4; border-radius: .55rem; }
-.market-cart__quantity button { width: 2rem; height: 2rem; border: 0; background: #f2f7f3; color: #176b45; font-size: 1.2rem; font-weight: 700; cursor: pointer; }
+.market-cart__quantity button { width: 44px; height: 44px; border: 0; background: #f2f7f3; color: #176b45; font-size: 1.2rem; font-weight: 700; cursor: pointer; }
 .market-cart__quantity button:hover { background: #dcefe2; }
-.market-cart__quantity input { width: 2.35rem; height: 2rem; border: 0; border-inline: 1px solid #bfd2c4; color: #173428; font: inherit; font-weight: 700; text-align: center; -moz-appearance: textfield; }
+.market-cart__quantity input { width: 44px; height: 44px; border: 0; border-inline: 1px solid #bfd2c4; color: #173428; font: inherit; font-weight: 700; text-align: center; -moz-appearance: textfield; }
 .market-cart__quantity input::-webkit-inner-spin-button, .market-cart__quantity input::-webkit-outer-spin-button { margin: 0; -webkit-appearance: none; }
 .market-cart__summary { width: min(100%, 390px); margin: 1.5rem 0 0 auto; padding: 1.25rem; border-radius: .9rem; background: #f1f7f2; }
 .market-cart__summary > div { display: flex; justify-content: space-between; gap: 1rem; padding: .45rem 0; color: #50675a; font-size: .93rem; }
