@@ -39,10 +39,10 @@ export default function CartApp({ onCheckout }: CartAppProps) {
           <ul className="market-cart__items" aria-label="Produtos no carrinho">
             {cart.items.map(({ product, quantity }) => (
               <li className="market-cart__item" key={product.id}>
-                {product.image ? (
+                {/^(https?:\/\/|data:image\/|\/)/i.test(product.image) ? (
                   <img className="market-cart__image" src={product.image} alt="" />
                 ) : (
-                  <div className="market-cart__image market-cart__image--placeholder" aria-hidden="true">🛍️</div>
+                  <div className="market-cart__image market-cart__image--placeholder" aria-hidden="true">{product.image || '🛍️'}</div>
                 )}
                 <div className="market-cart__product">
                   <h2>{product.name}</h2>

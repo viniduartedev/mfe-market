@@ -1,5 +1,20 @@
 import { expect, test } from '@playwright/test';
 
+test('emojis dos produtos não são requisitados como imagens, inclusive após recarregar', async ({ page }) => {
+  const imageRequests: string[] = [];
+  page.on('request', request => { if (request.resourceType() === 'image') imageRequests.push(request.url()); });
+  await page.goto('/');
+  const addButtons = page.getByRole('button', { name: /Adicionar/ });
+  await expect(addButtons).toHaveCount(6);
+  for (const button of await addButtons.all()) await button.click();
+  await expect(page.getByRole('list', { name: 'Produtos no carrinho' }).getByRole('listitem')).toHaveCount(6);
+  await expect(page.locator('.market-cart__image').filter({ hasText: '🍅' })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('list', { name: 'Produtos no carrinho' }).getByRole('listitem')).toHaveCount(6);
+  await expect(page.locator('.market-cart__image').filter({ hasText: '🍅' })).toBeVisible();
+  expect(imageRequests).toEqual([]);
+});
+
 test('catálogo → carrinho → checkout → pedido confirmado', async ({ page }, testInfo) => {
   const evidence: string[] = [];
   page.on('console', message => evidence.push(`console ${message.type()}: ${message.text()}`));
